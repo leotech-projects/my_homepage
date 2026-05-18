@@ -1,1 +1,115 @@
+"""Generate a simple personal homepage (index.html)."""
 
+from __future__ import annotations
+
+from html import escape
+
+name = "John Doe"
+title = "Software Engineer"
+email = "john.doe@example.com"
+phone = "+1 555-123-4567"
+location = "San Francisco, CA"
+
+skills = [
+    "Python",
+    "Java",
+    "C++",
+    "SQL",
+    "NoSQL",
+    "AWS",
+    "Docker",
+    "Kubernetes",
+]
+
+work_experience = [
+    {
+        "company": "Google",
+        "title": "Software Engineer",
+        "location": "Mountain View, CA",
+        "start_date": "2020-01-01",
+        "end_date": "2022-12-31",
+    },
+    {
+        "company": "Facebook",
+        "title": "Software Engineer Intern",
+        "location": "Menlo Park, CA",
+        "start_date": "2019-06-01",
+        "end_date": "2019-08-31",
+    },
+]
+
+education = [
+    {
+        "institution": "Stanford University",
+        "degree": "Master of Science in Computer Science",
+        "location": "Stanford, CA",
+        "start_date": "2018-09-01",
+        "end_date": "2020-06-30",
+    },
+    {
+        "institution": "University of California, Berkeley",
+        "degree": "Bachelor of Science in Computer Science",
+        "location": "Berkeley, CA",
+        "start_date": "2014-09-01",
+        "end_date": "2018-05-31",
+    },
+]
+
+
+def render_list(items: list[str]) -> str:
+    return "\n".join(f"    <li>{escape(item)}</li>" for item in items)
+
+
+skills_html = render_list(skills)
+work_html = render_list(
+    [
+        f"{job['company']}, {job['title']}, {job['location']}, {job['start_date']} - {job['end_date']}"
+        for job in work_experience
+    ]
+)
+education_html = render_list(
+    [
+        f"{degree['institution']}, {degree['degree']}, {degree['location']}, "
+        f"{degree['start_date']} - {degree['end_date']}"
+        for degree in education
+    ]
+)
+
+html_code = f"""<!DOCTYPE html>
+<html lang=\"en\">
+<head>
+  <meta charset=\"UTF-8\">
+  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
+  <title>{escape(name)}'s Homepage</title>
+</head>
+<body>
+  <h1>{escape(name)}</h1>
+  <h2>{escape(title)}</h2>
+  <ul>
+    <li>Email: {escape(email)}</li>
+    <li>Phone: {escape(phone)}</li>
+    <li>Location: {escape(location)}</li>
+  </ul>
+
+  <h2>Skills</h2>
+  <ul>
+{skills_html}
+  </ul>
+
+  <h2>Work Experience</h2>
+  <ul>
+{work_html}
+  </ul>
+
+  <h2>Education</h2>
+  <ul>
+{education_html}
+  </ul>
+</body>
+</html>
+"""
+
+with open("index.html", "w", encoding="utf-8") as f:
+    f.write(html_code)
+
+print("Homepage created successfully!")
